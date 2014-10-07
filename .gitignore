@@ -1,0 +1,7 @@
+# glob pattern
+
+# suffix by '/', ref dir
+
+# prefix by '!', ref exclude ignore
+
+.DS_Store
