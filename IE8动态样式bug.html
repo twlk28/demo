@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<body>
+
+<!-- bug1，动态样式里的 *select 在IE8没有过滤掉 -->
+<div class="demo1 demo1FIX">预期 display:inline-block; </div>
+<br>
+<div class="demo1 "> bug1: *select hack 在IE8动态样式里可以被识别 </div>
+<hr>
+
+
+<!-- bug2，动态样式里的伪元素会继承父级元素的盒模型 height margin padding border 等 -->
+<div class="demo2 clerfix demo2FIX">预期 </div>
+<div class="demo2 clerfix ">bug2: IE8动态样式里的伪元素会继承父级元素的盒模型 </div>
+
+<script>
+  var cssText = function () {/*!@preserve
+    .remove{display:none !important;}
+
+    .demo1{background:orange; margin:30px 0; width:200px;height:30px;display:inline-block;*display:inline;}
+    .demo1FIX{display:inline-block;}
+
+    .clerfix:after, .clerfix:before{content: ""; display: table; line-height: 0; }
+    .clerfix:after:after{clear: both;}
+    .demo2{width:260px;height:20px; padding-top:10px; margin-top:10px; border-top:10px solid #ccc; background:red; }
+    .demo2FIX:before,.demo2FIX:after{height:0; margin:0; border:0; padding:0;}
+
+    */
+    console.log}.toString().split('\n').slice(1,-2).join('\n')
+  addStyle(cssText)
+
+  function addStyle(cssText){
+    var el = document.createElement('style')
+    el.type = 'text/css'
+    if(el.styleSheet){
+      el.styleSheet.cssText = cssText
+    }else{
+      el.appendChild(document.createTextNode(cssText))
+    }
+    return document.getElementsByTagName('head')[0].appendChild(el)
+  }
+
+</script>
+
+</body>
+</html>
